@@ -1,0 +1,17 @@
+{
+"app_title" : "Todo List",
+"done" : "Done",
+"delete" : "Delete",
+"tasks_list" : "Task List",
+"language" : "Language",
+"arabic" : "Arabic",
+"english" : "English",
+"mode" : "Mode",
+"light" : "Light",
+"dark" : "Dark",
+"edit_task" : "Edit Task",
+"hint_title_edit" : "This is title",
+"hint_details_edit" : "Task details",
+"save_changes_btn" : "Save Changes",
+"hint_enter_your_task" : "enter your task"
+}
