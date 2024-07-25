@@ -10,6 +10,7 @@ class AppColors{
   static const Color unSelectedColor = Color(0xffC8C9CB);
   /// Dark Colors
   static const Color backgroundDarkColor = Color(0xff060E1E);
+  static const Color cardDarkColor = Color(0xff141922);
   static const Color whiteColor = Color(0xffffffff);
 
 }

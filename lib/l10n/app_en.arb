@@ -2,6 +2,7 @@
 "app_title" : "Todo List",
 "done" : "Done",
 "delete" : "Delete",
+"settings" : "Settings",
 "tasks_list" : "Task List",
 "language" : "Language",
 "arabic" : "Arabic",
