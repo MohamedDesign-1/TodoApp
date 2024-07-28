@@ -2,6 +2,7 @@
 "app_title" : "Todo List",
 "done" : "Done",
 "delete" : "Delete",
+"edit" : "Edit",
 "settings" : "Settings",
 "tasks_list" : "Task List",
 "language" : "Language",
@@ -14,5 +15,11 @@
 "hint_title_edit" : "This is title",
 "hint_details_edit" : "Task details",
 "save_changes_btn" : "Save Changes",
-"hint_enter_your_task" : "enter your task"
+"hint_enter_your_task" : "enter your task",
+"add_new_task" : "Add New Task",
+"error_massage" : "Please Enter Task Name",
+"task_name" : "Task Name",
+"select_date" : "Select Date",
+"task_date" : "Task Date",
+"add_task" : "Add Task"
 }

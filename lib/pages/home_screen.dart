@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:todoapp/style/app_colors.dart';
 import 'package:todoapp/style/theme_app.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:todoapp/widgets/task_bottom_sheet.dart';
 import '../providers/bottom_nav_select.dart';
 import '../providers/select_language.dart';
 import '../providers/select_theme.dart';
@@ -102,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       bottomNavigationBar: BottomAppBar(
         color: AppColors.whiteColor,
-        shape: CircularNotchedRectangle(),
+        shape: const CircularNotchedRectangle(),
         notchMargin: 8,
         child: Row(
           mainAxisSize: MainAxisSize.max,
@@ -112,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Icon(
                 Icons.list,
                 color: provider.selectedIndex == 0
-                    ? AppColors.selectedColor
+                    ? AppColors.primeryColor
                     : AppColors.unSelectedColor,
               ),
               onPressed: () {
@@ -123,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Icon(
                 Icons.settings,
                 color: provider.selectedIndex == 1
-                    ? AppColors.selectedColor
+                    ? AppColors.primeryColor
                     : AppColors.unSelectedColor,
               ),
               onPressed: () {
@@ -136,15 +137,24 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         shape: ThemeApp.lightTheme.floatingActionButtonTheme.shape,
         backgroundColor: ThemeApp.lightTheme.appBarTheme.backgroundColor,
-        onPressed: () {},
+        onPressed: () {
+          addTaskBottomSheet();
+        },
+        elevation: ThemeApp.lightTheme.floatingActionButtonTheme.elevation,
+        hoverElevation: 0,
         child: Icon(
           Icons.add,
           color: ThemeApp.lightTheme.iconTheme.color,
         ),
-        elevation: ThemeApp.lightTheme.floatingActionButtonTheme.elevation,
-        hoverElevation: 0,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
+
+  void addTaskBottomSheet() {
+    showModalBottomSheet(context: context,
+    builder: (context) => TaskBottomSheet(),
+    );
+  }
 }
+
