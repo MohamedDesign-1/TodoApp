@@ -18,7 +18,7 @@ class CustomBtn extends StatelessWidget {
           color: AppColors.primeryColor,
           borderRadius: BorderRadius.circular(4),
         ),
-        child: Center(child: Text(titleBtn, style: ThemeApp.lightTheme.textTheme.titleLarge,)),
+        child: Center(child: Text(titleBtn, style: ThemeApp.lightTheme.textTheme.titleLarge?.copyWith(fontSize: 20),)),
       ),
     );
   }
