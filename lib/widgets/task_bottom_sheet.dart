@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../style/app_colors.dart';
@@ -12,9 +13,13 @@ class TaskBottomSheet extends StatefulWidget {
 class _TaskBottomSheetState extends State<TaskBottomSheet> {
   var selectDate = DateTime.now();
   var formkey = GlobalKey<FormState>();
+  CollectionReference TasksList = FirebaseFirestore.instance.collection('Tasks List');
+  final TextEditingController taskNameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: MediaQuery.of(context).size.height * 0.4,
       padding: const EdgeInsets.all(16),
       decoration: const BoxDecoration(
         color: AppColors.whiteColor,
@@ -23,41 +28,43 @@ class _TaskBottomSheetState extends State<TaskBottomSheet> {
           topRight: Radius.circular(16),
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            AppLocalizations.of(context)!.add_new_task,
-            style: ThemeApp.lightTheme.textTheme.bodyLarge,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          const Divider(
-            thickness: 3,
-            color: AppColors.blackColor,
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Text(
-            AppLocalizations.of(context)!.task_name,
-            style: ThemeApp.lightTheme.textTheme.titleMedium,
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Form(
-            key: formkey,
-            child: TextFormField(
-              validator: (value){
-              if (value == null || value.isEmpty) {
-                return AppLocalizations.of(context)!.error_massage;
-                }
-              return null;
-              },
-              decoration: InputDecoration(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              AppLocalizations.of(context)!.add_new_task,
+              style: ThemeApp.lightTheme.textTheme.bodyLarge,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            const Divider(
+              thickness: 3,
+              color: AppColors.blackColor,
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              AppLocalizations.of(context)!.task_name,
+              style: ThemeApp.lightTheme.textTheme.titleMedium,
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Form(
+              key: formkey,
+              child: TextFormField(
+                controller: taskNameController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return AppLocalizations.of(context)!.error_massage;
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(4),
                   ),
@@ -70,35 +77,38 @@ class _TaskBottomSheetState extends State<TaskBottomSheet> {
                   errorBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(4),
                     borderSide: const BorderSide(color: AppColors.redColor),
-                  )),
+                  ),
+                ),
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Text(
-            AppLocalizations.of(context)!.select_date,
-            style: ThemeApp.lightTheme.textTheme.titleMedium,
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          TextButton(
-            onPressed: () {
-              showCalendar();
-            },
-            child : Text('${selectDate.day}/${selectDate.month}/${selectDate.year}',
-            style: ThemeApp.lightTheme.textTheme.titleMedium,
-            textAlign: TextAlign.center,
+            const SizedBox(
+              height: 8,
             ),
-          ),
-          CustomBtn(
+            Text(
+              AppLocalizations.of(context)!.select_date,
+              style: ThemeApp.lightTheme.textTheme.titleMedium,
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            TextButton(
+              onPressed: () {
+                showCalendar();
+              },
+              child: Text(
+                '${selectDate.day}/${selectDate.month}/${selectDate.year}',
+                style: ThemeApp.lightTheme.textTheme.titleMedium,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            CustomBtn(
               titleBtn: AppLocalizations.of(context)!.add_task,
               onTap: () {
                 addTask();
-              }
-          )
-        ],
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -110,16 +120,26 @@ class _TaskBottomSheetState extends State<TaskBottomSheet> {
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365)),
     );
-    setState(
-      () {
-        selectDate = chosenDate!;
-      },
-    );
+    setState(() {
+      if (chosenDate != null) {
+        selectDate = chosenDate;
+      }
+    });
   }
 
-  void addTask() {
-    if (formkey.currentState!.validate() == true) {
-      /// Add Task
+  addTask() {
+    if (formkey.currentState!.validate()) {
+      var taskName = taskNameController.text;
+      TasksList
+          .add({'task name': taskName, 'date': selectDate})
+          .then((value) => print("Task Added"))
+          .catchError((error) => print("Failed to add Task: $error"));
     }
+  }
+
+  @override
+  void dispose() {
+    taskNameController.dispose();
+    super.dispose();
   }
 }

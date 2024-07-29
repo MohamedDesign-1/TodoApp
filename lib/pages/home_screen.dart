@@ -138,7 +138,8 @@ class _HomeScreenState extends State<HomeScreen> {
         shape: ThemeApp.lightTheme.floatingActionButtonTheme.shape,
         backgroundColor: ThemeApp.lightTheme.appBarTheme.backgroundColor,
         onPressed: () {
-          addTaskBottomSheet();
+          addTaskBottomSheet(
+          );
         },
         elevation: ThemeApp.lightTheme.floatingActionButtonTheme.elevation,
         hoverElevation: 0,
@@ -153,7 +154,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void addTaskBottomSheet() {
     showModalBottomSheet(context: context,
-    builder: (context) => TaskBottomSheet(),
+    isScrollControlled: true,
+
+    builder: (context) => Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: TaskBottomSheet(),
+    ),
     );
   }
 }

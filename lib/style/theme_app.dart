@@ -8,6 +8,9 @@ class ThemeApp {
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.primeryColor,
       elevation: 0,
+      iconTheme: IconThemeData(
+        color: AppColors.whiteColor,
+      ),
     ),
     textTheme: TextTheme(
       titleLarge: GoogleFonts.cairo(

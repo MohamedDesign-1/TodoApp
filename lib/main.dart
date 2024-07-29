@@ -6,7 +6,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:todoapp/providers/bottom_nav_select.dart';
 import 'package:todoapp/providers/select_language.dart';
 import 'package:todoapp/providers/select_theme.dart';
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp (MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => SelectLanguage()),
