@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class SelectTheme extends ChangeNotifier {
   ThemeMode appTheme = ThemeMode.light;
 
@@ -9,6 +10,7 @@ class SelectTheme extends ChangeNotifier {
     appTheme = newMode;
     notifyListeners();
   }
+
   bool isDarkMode() {
     return appTheme == ThemeMode.dark;
   }

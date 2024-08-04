@@ -7,6 +7,7 @@ import 'package:todoapp/providers/bottom_nav_select.dart';
 import 'package:todoapp/providers/select_language.dart';
 import 'package:todoapp/providers/select_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:todoapp/style/theme_app.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -14,7 +15,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp (MultiProvider(
+  runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => SelectLanguage()),
         ChangeNotifierProvider(create: (context) => BottomNavSelect()),
@@ -30,6 +31,7 @@ class TodoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     var provider = Provider.of<SelectLanguage>(context);
     var providerTheme = Provider.of<SelectTheme>(context);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: HomeScreen.routeName,
@@ -38,6 +40,8 @@ class TodoApp extends StatelessWidget {
         EditTask.routeName: (context) => EditTask(),
       },
       themeMode: providerTheme.isDarkMode() ? ThemeMode.dark : ThemeMode.light,
+      theme: ThemeApp.lightTheme,
+      darkTheme: ThemeApp.darkTheme,
       locale: Locale(provider.appLanguage),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,

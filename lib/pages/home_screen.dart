@@ -22,9 +22,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     var provider = Provider.of<BottomNavSelect>(context);
     var providerLang = Provider.of<SelectLanguage>(context);
-    var providerTheme = Provider.of<SelectTheme>(context);
+    var themeProvider = Provider.of<SelectTheme>(context);
+    var scaffoldColor = themeProvider.isDarkMode() ? AppColors.backgroundDarkColor : AppColors.backgroundColor;
+
     return Scaffold(
-      backgroundColor: ThemeApp.lightTheme.scaffoldBackgroundColor ,
+      backgroundColor: scaffoldColor,
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context)!.app_title,
@@ -44,6 +46,56 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: MediaQuery.of(context).size.height * 0.08,
                     color: AppColors.primeryColor,
                   ),
+                  themeProvider.isDarkMode() ?
+                  provider.selectedIndex == 0 ?
+                  EasyDateTimeLine(
+                    locale: providerLang.appLanguage == 'en' ? 'en' : 'ar',
+                    initialDate: DateTime.now(),
+                    onDateChange: (selectedDate) {},
+                    headerProps: const EasyHeaderProps(
+                      showHeader: false,
+                    ),
+                    activeColor: AppColors.cardDarkColor,
+                    dayProps: EasyDayProps(
+                      todayHighlightStyle: TodayHighlightStyle.withBackground,
+                      todayHighlightColor: AppColors.cardDarkColor,
+                      activeDayStyle: const DayStyle(
+                        dayNumStyle: TextStyle(
+                          fontSize: 20,
+                          color: AppColors.primeryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        dayStrStyle: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.primeryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        monthStrStyle: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.primeryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      inactiveDayStyle: DayStyle(
+                        decoration: BoxDecoration(
+                          color: AppColors.cardDarkColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        dayNumStyle: const TextStyle(
+                          fontSize: 20,
+                          color: AppColors.whiteColor,
+                        ),
+                        dayStrStyle: const TextStyle(
+                          fontSize: 12,
+                          color: AppColors.whiteColor,
+                        ),
+                        monthStrStyle: const TextStyle(
+                          fontSize: 12,
+                          color: AppColors.whiteColor,
+                        ),
+                      ),
+                    ),
+                  ) : Container() :
                   provider.selectedIndex == 0 ?
                   EasyDateTimeLine(
                     locale: providerLang.appLanguage == 'en' ? 'en' : 'ar',
@@ -55,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     activeColor: AppColors.whiteColor,
                     dayProps: EasyDayProps(
                       todayHighlightStyle: TodayHighlightStyle.withBackground,
-                      todayHighlightColor: AppColors.whiteColor,
+                      todayHighlightColor: themeProvider.isDarkMode() ? AppColors.cardDarkColor : AppColors.whiteColor,
                       activeDayStyle: const DayStyle(
                         dayNumStyle: TextStyle(
                           fontSize: 20,
@@ -102,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
       bottomNavigationBar: BottomAppBar(
-        color: AppColors.whiteColor,
+        color: themeProvider.isDarkMode() ? AppColors.cardDarkColor : AppColors.whiteColor,
         shape: const CircularNotchedRectangle(),
         notchMargin: 8,
         child: Row(
@@ -155,7 +207,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void addTaskBottomSheet() {
     showModalBottomSheet(context: context,
     isScrollControlled: true,
-
     builder: (context) => Padding(
       padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: TaskBottomSheet(),
