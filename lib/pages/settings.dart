@@ -6,40 +6,90 @@ import 'package:todoapp/style/theme_app.dart';
 import 'package:todoapp/widgets/drop_items_language.dart';
 import '../providers/select_theme.dart';
 
-
-class Settings extends StatelessWidget {
+class Settings extends StatefulWidget {
   static const String routeName = 'settings';
-  const Settings({Key? key}) : super(key: key);
+
+  @override
+  State<Settings> createState() => _SettingsState();
+}
+
+class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    var themeProvider = Provider.of<SelectTheme>(context, listen: false);
+    return themeProvider.isDarkMode() ?
+    Container(
       margin: EdgeInsets.only(left: 16, right: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(AppLocalizations.of(context)!.language , style: ThemeApp.lightTheme.textTheme.bodyLarge,),
+          Text(AppLocalizations.of(context)!.language, style: ThemeApp.darkTheme.textTheme.bodyLarge,),
           const SizedBox(height: 8,),
           const DropItemsMenuLanguage(),
           const SizedBox(height: 8,),
-          Text(AppLocalizations.of(context)!.mode , style: ThemeApp.lightTheme.textTheme.bodyLarge,),
+          Text(AppLocalizations.of(context)!.mode, style: ThemeApp.darkTheme.textTheme.bodyLarge,),
           const SizedBox(height: 8,),
           DropdownButtonFormField(
             value: Provider.of<SelectTheme>(context).isDarkMode() ? 'dark' : 'light',
             onChanged: (value) {
               Provider.of<SelectTheme>(context, listen: false).appTheme = value == 'dark' ? ThemeMode.dark : ThemeMode.light;
+              Provider.of<SelectTheme>(context, listen: false);
+
             },
             items: [
               DropdownMenuItem(
                 value: 'light',
-                child: Text(AppLocalizations.of(context)!.light , style: ThemeApp.lightTheme.textTheme.titleMedium,),
+                child: Text(AppLocalizations.of(context)!.light, style: ThemeApp.darkTheme.textTheme.titleMedium,),
               ),
               DropdownMenuItem(
                 value: 'dark',
-                child: Text(AppLocalizations.of(context)!.dark , style: ThemeApp.lightTheme.textTheme.titleMedium,),
+                child: Text(AppLocalizations.of(context)!.dark, style: ThemeApp.darkTheme.textTheme.titleMedium,),
               ),
             ],
-            hint: Text('Select Theme', style: ThemeApp.lightTheme.textTheme.titleMedium,),
+            dropdownColor: AppColors.cardDarkColor,
+            hint: Text('Select Theme', style: ThemeApp.darkTheme.textTheme.titleMedium,),
+            isExpanded: true,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(4),
+              ),
+              fillColor: AppColors.cardDarkColor,
+              filled: true,
+              enabled: false,
+            ),
+          ),
+        ],
+      ),
+    ) :  //Dark Theme
+    Container(
+      margin: EdgeInsets.only(left: 16, right: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(AppLocalizations.of(context)!.language, style: ThemeApp.lightTheme.textTheme.bodyLarge,),
+          const SizedBox(height: 8,),
+          const DropItemsMenuLanguage(),
+          const SizedBox(height: 8,),
+          Text(AppLocalizations.of(context)!.mode, style: ThemeApp.lightTheme.textTheme.bodyLarge,),
+          const SizedBox(height: 8,),
+          DropdownButtonFormField(
+            value: Provider.of<SelectTheme>(context).isDarkMode() ? 'dark' : 'light',
+            onChanged: (value) {
+              Provider.of<SelectTheme>(context, listen: false).appTheme = value == 'dark' ? ThemeMode.dark : ThemeMode.light;
+              Provider.of<SelectTheme>(context, listen: false);
+            },
+            items: [
+              DropdownMenuItem(
+                value: 'light',
+                child: Text(AppLocalizations.of(context)!.light, style: ThemeApp.lightTheme.textTheme.titleMedium,),
+              ),
+              DropdownMenuItem(
+                value: 'dark',
+                child: Text(AppLocalizations.of(context)!.dark, style: ThemeApp.lightTheme.textTheme.titleMedium,),
+              ),
+            ],
+            hint: Text('Select Theme', style: ThemeApp.darkTheme.textTheme.titleMedium,),
             isExpanded: true,
             decoration: InputDecoration(
               border: OutlineInputBorder(
@@ -52,6 +102,6 @@ class Settings extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ); //Light Theme
   }
 }
