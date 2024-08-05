@@ -3,9 +3,10 @@ import '../pages/settings.dart';
 import '../pages/task_lists.dart';
 
 class BottomNavSelect extends ChangeNotifier {
+
   int selectedIndex = 0;
   final List<Widget> _pages = [
-    TaskLists(),
+    TaskLists( ),
     Settings(),
   ];
 

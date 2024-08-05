@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:todoapp/models/task_model.dart';
 import '../providers/select_theme.dart';
 import '../style/app_colors.dart';
 import '../style/theme_app.dart';
@@ -17,6 +19,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet> {
   var formkey = GlobalKey<FormState>();
   CollectionReference TasksList = FirebaseFirestore.instance.collection('Tasks List');
   final TextEditingController taskNameController = TextEditingController();
+  TaskModel? taskModel;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +113,6 @@ class _TaskBottomSheetState extends State<TaskBottomSheet> {
               titleBtn: AppLocalizations.of(context)!.add_task,
               onTap: () {
                 addTask();
-                print('hi');
               },
             ),
           ],
@@ -230,16 +232,15 @@ class _TaskBottomSheetState extends State<TaskBottomSheet> {
   addTask() {
     if (formkey.currentState!.validate()) {
       var taskName = taskNameController.text;
-      TasksList
-          .add({'task name': taskName, 'date': selectDate})
+      return TasksList.add({
+        'Task Name' : taskName,
+        'Date': selectDate,
+        'id' : FirebaseAuth.instance.currentUser!.uid
+      })
           .then((value) => print("Task Added"))
           .catchError((error) => print("Failed to add Task: $error"));
     }
+      Navigator.pop(context);
+    }
   }
 
-  @override
-  void dispose() {
-    taskNameController.dispose();
-    super.dispose();
-  }
-}

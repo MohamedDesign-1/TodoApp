@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
@@ -7,14 +8,27 @@ import 'package:todoapp/style/app_colors.dart';
 import 'package:todoapp/style/theme_app.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+
 class TaskLists extends StatefulWidget {
   static const String routeName = 'TaskListPage';
-
   @override
   State<TaskLists> createState() => _TaskListsState();
 }
 
 class _TaskListsState extends State<TaskLists> {
+List data = [];
+getData() async {
+QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      .collection('Tasks List').where("id" , isEqualTo: FirebaseAuth.instance.currentUser!.uid ).get();
+      data.addAll(querySnapshot.docs);
+      setState(() {});
+}
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -28,7 +42,12 @@ class _TaskListsState extends State<TaskLists> {
               dismissible: DismissiblePane(onDismissed: () {}),
               children: [
                 SlidableAction(
-                  onPressed: (context){},
+                  onPressed: (context) async {
+                  await FirebaseFirestore.instance.collection('Tasks List').doc(data[index].id).delete();
+                  setState(() {
+                    data.removeAt(index);
+                  });
+                  },
                   backgroundColor: Color(0xFFFE4A49),
                   foregroundColor: Colors.white,
                   icon: Icons.delete,
@@ -76,12 +95,12 @@ class _TaskListsState extends State<TaskLists> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Task',
+                      Text(data[index]['Task Name'],
                       style: ThemeApp.lightTheme.textTheme.titleMedium,
                       ),
-                      Text(DateFormat.yMMMd().format(DateTime.now()) ,
+                      Text( DateFormat.yMMMMd().format((data[index]['Date'] as Timestamp).toDate()).toString(),
                         style: ThemeApp.lightTheme.textTheme.titleMedium?.copyWith(
-                          fontSize: 16
+                            fontSize: 16
                         ),
                       ),
                     ],
@@ -107,8 +126,9 @@ class _TaskListsState extends State<TaskLists> {
             ),
           ),
         ),
-        itemCount: 10,
+        itemCount: data.length,
       ),
     );
   }
+
 }

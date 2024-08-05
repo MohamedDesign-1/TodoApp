@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:todoapp/pages/edit_task.dart';
 import 'package:todoapp/pages/home_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:todoapp/pages/signin.dart';
+import 'package:todoapp/pages/signup.dart';
 import 'package:todoapp/providers/bottom_nav_select.dart';
 import 'package:todoapp/providers/select_language.dart';
 import 'package:todoapp/providers/select_theme.dart';
@@ -34,10 +36,12 @@ class TodoApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: HomeScreen.routeName,
+      initialRoute: SignIn.routeName,
       routes: {
         HomeScreen.routeName: (context) => HomeScreen(),
         EditTask.routeName: (context) => EditTask(),
+        Signup.routeName: (context) => Signup(),
+        SignIn.routeName: (context) => SignIn(),
       },
       themeMode: providerTheme.isDarkMode() ? ThemeMode.dark : ThemeMode.light,
       theme: ThemeApp.lightTheme,
