@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class TaskModel {
+  static const String collectionName = 'Tasks List';
+
   String id;
   String name;
-  String date;
+  DateTime date;
   bool isDone;
 
   TaskModel({
@@ -11,16 +15,13 @@ class TaskModel {
     this.isDone = false,
   });
 
-  TaskModel fromJson(Map<String, dynamic> json) {
-    return TaskModel(
-      name: json['task name'],
-      date: json['date'],
-      isDone: json['isDone'] ?? false,
-      id: json['id'] ?? "",
-    );
-  }
+  TaskModel.fromFireStore(Map<String, dynamic> data)
+      : name = data['task name'],
+        date = (data['date'] as Timestamp).toDate(),
+        isDone = data['isDone'] ?? false,
+        id = data['id'] ?? "";
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toFireStore() {
     return {
       'task name': name,
       'date': date,

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:todoapp/pages/signin.dart';
 import 'package:todoapp/style/app_colors.dart';
 import 'package:todoapp/style/theme_app.dart';
+import 'package:todoapp/widgets/custom_btn.dart';
 import 'package:todoapp/widgets/drop_items_language.dart';
 import '../providers/select_theme.dart';
 
@@ -59,6 +61,11 @@ class _SettingsState extends State<Settings> {
               enabled: false,
             ),
           ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.03,),
+          CustomBtn(titleBtn: AppLocalizations.of(context)!.logout_account, onTap: (){
+            Navigator.pushReplacementNamed(context, SignIn.routeName);
+          })
+
         ],
       ),
     ) :  //Dark Theme
@@ -100,6 +107,11 @@ class _SettingsState extends State<Settings> {
               enabled: false,
             ),
           ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.03,),
+          CustomBtn(titleBtn: AppLocalizations.of(context)!.logout_account, onTap: (){
+            Navigator.pushReplacementNamed(context, SignIn.routeName);
+          })
+
         ],
       ),
     ); //Light Theme
