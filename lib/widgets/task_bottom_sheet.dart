@@ -1,9 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/models/task_model.dart';
+import 'package:todoapp/utils/firbase_utils.dart';
+import '../providers/firbase_provider.dart';
 import '../providers/select_theme.dart';
 import '../style/app_colors.dart';
 import '../style/theme_app.dart';
@@ -17,12 +17,12 @@ class TaskBottomSheet extends StatefulWidget {
 class _TaskBottomSheetState extends State<TaskBottomSheet> {
   var selectDate = DateTime.now();
   var formkey = GlobalKey<FormState>();
-  CollectionReference TasksList = FirebaseFirestore.instance.collection('Tasks List');
   final TextEditingController taskNameController = TextEditingController();
-  TaskModel? taskModel;
+  late FireBaseProvider listProvider;
 
   @override
   Widget build(BuildContext context) {
+    listProvider = Provider.of<FireBaseProvider>(context);
     var themeProvider = Provider.of<SelectTheme>(context);
     return themeProvider.isDarkMode() ?
     Container(
@@ -231,16 +231,14 @@ class _TaskBottomSheetState extends State<TaskBottomSheet> {
 
   addTask() {
     if (formkey.currentState!.validate()) {
-      var taskName = taskNameController.text;
-      return TasksList.add({
-        'Task Name' : taskName,
-        'Date': selectDate,
-        'id' : FirebaseAuth.instance.currentUser!.uid
-      })
-          .then((value) => print("Task Added"))
-          .catchError((error) => print("Failed to add Task: $error"));
-    }
+      Task task = Task(
+      title: taskNameController.text,
+      dateTime: selectDate);
+      FirebaseUtils.addTaskToFireStore(task).then((value) => print("Task Added Successfully"))
+      .catchError((error) => print("Failed to add task : $error"));
+      listProvider.getAllTasksFromFireStore();
       Navigator.pop(context);
+      }
     }
   }
 

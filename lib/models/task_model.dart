@@ -1,32 +1,26 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-class TaskModel {
+class Task {
   static const String collectionName = 'Tasks List';
+  String id ;
+  String title;
+  DateTime dateTime ;
+  bool isDone ;
 
-  String id;
-  String name;
-  DateTime date;
-  bool isDone;
+  Task({this.id = '', required this.title , required this.dateTime , this.isDone = false});
 
-  TaskModel({
-    required this.name,
-    required this.date,
-    this.id = "",
-    this.isDone = false,
-  });
+  Task.fromFireStore(Map <String , dynamic> data) : this (
+    id: data['id'] as String,
+    title: data['title'] as String,
+    dateTime: DateTime.fromMillisecondsSinceEpoch(data['dateTime']),
+    isDone: data['isDone'] as bool,
+  );
 
-  TaskModel.fromFireStore(Map<String, dynamic> data)
-      : name = data['task name'],
-        date = (data['date'] as Timestamp).toDate(),
-        isDone = data['isDone'] ?? false,
-        id = data['id'] ?? "";
-
-  Map<String, dynamic> toFireStore() {
+  Map <String , dynamic> toFireStore(){
     return {
-      'task name': name,
-      'date': date,
-      'isDone': isDone,
-      'id': id,
+      'id' : id,
+      'title' : title,
+      'dateTime' : dateTime.millisecondsSinceEpoch,
+      'isDone' : isDone
     };
   }
+
 }

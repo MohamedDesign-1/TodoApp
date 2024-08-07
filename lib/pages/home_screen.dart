@@ -6,6 +6,7 @@ import 'package:todoapp/style/theme_app.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:todoapp/widgets/task_bottom_sheet.dart';
 import '../providers/bottom_nav_select.dart';
+import '../providers/firbase_provider.dart';
 import '../providers/select_language.dart';
 import '../providers/select_theme.dart';
 
@@ -23,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
     var provider = Provider.of<BottomNavSelect>(context);
     var providerLang = Provider.of<SelectLanguage>(context);
     var themeProvider = Provider.of<SelectTheme>(context);
+    var listProvider = Provider.of<FireBaseProvider>(context);
     var scaffoldColor = themeProvider.isDarkMode() ? AppColors.backgroundDarkColor : AppColors.backgroundColor;
 
     return Scaffold(
@@ -50,8 +52,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   provider.selectedIndex == 0 ?
                   EasyDateTimeLine(
                     locale: providerLang.appLanguage == 'en' ? 'en' : 'ar',
-                    initialDate: DateTime.now(),
-                    onDateChange: (selectedDate) {},
+                    initialDate: listProvider.selectDate,
+                    onDateChange: (selectedDate) {
+                    listProvider.changeSelectDate(selectedDate);
+                    },
                     headerProps: const EasyHeaderProps(
                       showHeader: false,
                     ),
@@ -99,8 +103,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   provider.selectedIndex == 0 ?
                   EasyDateTimeLine(
                     locale: providerLang.appLanguage == 'en' ? 'en' : 'ar',
-                    initialDate: DateTime.now(),
-                    onDateChange: (selectedDate) {},
+                    initialDate: listProvider.selectDate,
+                    onDateChange: (selectedDate) {
+                      listProvider.changeSelectDate(selectedDate);
+                    },
                     headerProps: const EasyHeaderProps(
                       showHeader: false,
                     ),

@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/pages/signin.dart';
 import 'package:todoapp/style/app_colors.dart';
 import 'package:todoapp/style/theme_app.dart';
+import 'package:todoapp/utils/firbase_utils.dart';
 import 'package:todoapp/widgets/custom_btn.dart';
 import 'package:todoapp/widgets/drop_items_language.dart';
 import '../providers/select_theme.dart';
@@ -19,7 +21,7 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    var themeProvider = Provider.of<SelectTheme>(context, listen: false);
+    var themeProvider = Provider.of<SelectTheme>(context);
     return themeProvider.isDarkMode() ?
     Container(
       margin: EdgeInsets.only(left: 16, right: 16),
@@ -35,10 +37,8 @@ class _SettingsState extends State<Settings> {
           DropdownButtonFormField(
             value: Provider.of<SelectTheme>(context).isDarkMode() ? 'dark' : 'light',
             onChanged: (value) {
-              Provider.of<SelectTheme>(context, listen: false).appTheme = value == 'dark' ? ThemeMode.dark : ThemeMode.light;
-              Provider.of<SelectTheme>(context, listen: false);
-
-            },
+              Provider.of<SelectTheme>(context, listen: false).changeTheme(value == 'dark' ? ThemeMode.dark : ThemeMode.light);
+              },
             items: [
               DropdownMenuItem(
                 value: 'light',
@@ -62,7 +62,8 @@ class _SettingsState extends State<Settings> {
             ),
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.03,),
-          CustomBtn(titleBtn: AppLocalizations.of(context)!.logout_account, onTap: (){
+          CustomBtn(titleBtn: AppLocalizations.of(context)!.logout_account, onTap: () {
+            FirebaseUtils.signOut();
             Navigator.pushReplacementNamed(context, SignIn.routeName);
           })
 
@@ -84,7 +85,6 @@ class _SettingsState extends State<Settings> {
             value: Provider.of<SelectTheme>(context).isDarkMode() ? 'dark' : 'light',
             onChanged: (value) {
               Provider.of<SelectTheme>(context, listen: false).appTheme = value == 'dark' ? ThemeMode.dark : ThemeMode.light;
-              Provider.of<SelectTheme>(context, listen: false);
             },
             items: [
               DropdownMenuItem(

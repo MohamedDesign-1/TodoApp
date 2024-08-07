@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:todoapp/pages/home_screen.dart';
 import 'package:todoapp/pages/signup.dart';
+import 'package:todoapp/utils/firbase_utils.dart';
 import 'package:todoapp/widgets/custom_btn.dart';
 import 'package:todoapp/widgets/custom_text_filed.dart';
 import '../providers/select_theme.dart';
@@ -82,7 +83,6 @@ class _SignInState extends State<SignIn> {
                                   return AppLocalizations.of(context)!
                                       .hint_enter_valid_Email;
                                 }
-
                                 return null;
                               },
                               controller: emailController,
@@ -108,14 +108,14 @@ class _SignInState extends State<SignIn> {
                               hintText:
                                   AppLocalizations.of(context)!.hint_password,
                               validator: (checkPassword) {
-                                if (checkPassword == null ||
-                                    checkPassword.isEmpty) {
-                                  return AppLocalizations.of(context)!
-                                      .error_massage_password;
+                                if (checkPassword == null || checkPassword.isEmpty) {
+                                  return AppLocalizations.of(context)!.error_massage_password;
                                 } else if (checkPassword.length < 8) {
-                                  return AppLocalizations.of(context)!
-                                      .your_password_less_8;
+                                  return AppLocalizations.of(context)!.your_password_less_8;
+                                } else if (password.text != checkPassword) {
+                                  return AppLocalizations.of(context)!.your_password_match;
                                 }
+                                return null;
                               },
                               controller: password,
                               obscureText: true),
@@ -133,8 +133,7 @@ class _SignInState extends State<SignIn> {
                           ),
                           TextButton(
                               onPressed: () {
-                                Navigator.of(context)
-                                    .pushReplacementNamed(Signup.routeName);
+                                Navigator.of(context).pushReplacementNamed(Signup.routeName);
                               },
                               child: Text(
                                 AppLocalizations.of(context)!
@@ -218,8 +217,11 @@ class _SignInState extends State<SignIn> {
                                 } else if (checkPassword.length < 8) {
                                   return AppLocalizations.of(context)!
                                       .your_password_less_8;
+                                } else if (password.text != checkPassword) {
+                                  return AppLocalizations.of(context)!.your_password_match;
                                 }
-                              },
+                                return null;
+                                },
                               controller: password,
                               obscureText: true),
                           SizedBox(
@@ -254,21 +256,10 @@ class _SignInState extends State<SignIn> {
       ),
     );
   }
-
-  Future<void> loginAccount(context) async {
+  void loginAccount(context) {
     if (formkey.currentState!.validate()) {
-      try {
-        final credential = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(
-                email: emailController.text, password: password.text);
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'user-not-found') {
-          print('No user found for that email.');
-        } else if (e.code == 'wrong-password') {
-          print('Wrong password provided for that user.');
-        }
-      }
-      Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+    FirebaseUtils.signInAccount(emailController.text , password.text);
+    Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
     }
   }
 }
