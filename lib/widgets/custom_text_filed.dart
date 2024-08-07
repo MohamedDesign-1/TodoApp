@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/select_theme.dart';
 import '../style/app_colors.dart';
 
 class CustomTextFiled extends StatelessWidget {
@@ -24,6 +26,7 @@ class CustomTextFiled extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<SelectTheme>(context);
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
@@ -33,7 +36,7 @@ class CustomTextFiled extends StatelessWidget {
         suffixIcon: suffixIcon,
           hintText: hintText,
           hintStyle: hintStyle,
-          fillColor: AppColors.whiteColor,
+          fillColor: themeProvider.isDarkMode() ? AppColors.cardDarkColor : AppColors.whiteColor,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(

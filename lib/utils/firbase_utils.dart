@@ -1,5 +1,77 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:todoapp/models/task_model.dart';
 
 class FirebaseUtils {
+  static CollectionReference <Task> getTasksCollection(){
+    return FirebaseFirestore.instance.collection(Task.collectionName).withConverter <Task>(
+        fromFirestore: (snapshot, options) => Task.fromFireStore(snapshot.data()!),
+        toFirestore: (task , options) => task.toFireStore());
+  }
 
+  static Future <void> addTaskToFireStore(Task task) {
+    var taskCollection = getTasksCollection();
+    DocumentReference<Task> taskDocRef = taskCollection.doc();
+    task.id = taskDocRef.id;
+    return taskDocRef.set(task);
+  }
+
+  static Future <void> deleteTaskFromFireStore(Task task) {
+    var taskCollection = getTasksCollection();
+    return taskCollection.doc(task.id).delete()
+        .then((value) => print("Task Deleted"))
+        .catchError((error) => print("Failed to delete Task: $error"));
+  }
+
+  static Future<void> updateTaskInFireStore(Task task) {
+    var taskCollection = getTasksCollection();
+    return taskCollection.doc(task.id).update(task.toFireStore())
+        .then((value) => print("Task Updated"))
+        .catchError((error) => print("Failed to update Task: $error"));
+  }
+
+  static void signInAccount(String emailAddress, String password) async {
+  try {
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailAddress,
+          password: password
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      } else if (e.code == 'invalid-email') {
+        print('The email address is badly formatted.');
+      } else if (e.code == 'user-disabled') {
+        print('The user account has been disabled.');
+      } else if (e.code == 'too-many-requests') {
+        print('Too many requests');
+      }
+    }
+}
+
+static Future<void> signUpAccount(String emailAddress, String password) async {
+  try {
+    final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: emailAddress,
+      password: password,
+    );
+  } on FirebaseAuthException catch (e) {
+    if (e.code == 'weak-password') {
+      print('The password provided is too weak.');
+    } else if (e.code == 'email-already-in-use') {
+      print('The account already exists for that email.');
+    }
+  } catch (e) {
+    print(e);
+  }
+}
+
+static void signOut() async {
+  await FirebaseAuth.instance.signOut()
+  .then((value) => print("Signed Out"))
+  .catchError((error) => print("Failed to sign out: $error"));
+}
 
 }
