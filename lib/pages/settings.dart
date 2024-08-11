@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +36,7 @@ class _SettingsState extends State<Settings> {
           DropdownButtonFormField(
             value: Provider.of<SelectTheme>(context).isDarkMode() ? 'dark' : 'light',
             onChanged: (value) {
-              Provider.of<SelectTheme>(context, listen: false).changeTheme(value == 'dark' ? ThemeMode.dark : ThemeMode.light);
+              Provider.of<SelectTheme>(context, listen: false).selectTheme();
               },
             items: [
               DropdownMenuItem(
@@ -84,7 +83,7 @@ class _SettingsState extends State<Settings> {
           DropdownButtonFormField(
             value: Provider.of<SelectTheme>(context).isDarkMode() ? 'dark' : 'light',
             onChanged: (value) {
-              Provider.of<SelectTheme>(context, listen: false).appTheme = value == 'dark' ? ThemeMode.dark : ThemeMode.light;
+              Provider.of<SelectTheme>(context, listen: false).selectTheme();
             },
             items: [
               DropdownMenuItem(
@@ -109,11 +108,12 @@ class _SettingsState extends State<Settings> {
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.03,),
           CustomBtn(titleBtn: AppLocalizations.of(context)!.logout_account, onTap: (){
+            FirebaseUtils.signOut();
             Navigator.pushReplacementNamed(context, SignIn.routeName);
-          })
-
+            }
+          )
         ],
       ),
-    ); //Light Theme
+    );  //Light Theme
   }
 }

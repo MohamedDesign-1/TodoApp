@@ -18,35 +18,45 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (context) => SelectLanguage()),
-    ChangeNotifierProvider(create: (context) => BottomNavSelect()),
-    ChangeNotifierProvider(create: (context) => SelectTheme()),
-    ChangeNotifierProvider(create: (context) => FireBaseProvider()),
-  ], child: TodoApp()));
+
+  ///shared preferences for language
+  SelectLanguage languageProvider = SelectLanguage();
+  await languageProvider.loadLanguage();
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => languageProvider),
+        ChangeNotifierProvider(create: (context) => BottomNavSelect()),
+        ChangeNotifierProvider(create: (context) => SelectTheme()),
+        ChangeNotifierProvider(create: (context) => FireBaseProvider()),
+      ],
+      child: TodoApp(),
+    ),
+  );
 }
 
 class TodoApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<SelectLanguage>(context);
-    var providerTheme = Provider.of<SelectTheme>(context);
+    var languageProvider = Provider.of<SelectLanguage>(context);
+    var themeProvider = Provider.of<SelectTheme>(context);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: SignIn.routeName,
+      initialRoute: HomeScreen.routeName,
       routes: {
         HomeScreen.routeName: (context) => HomeScreen(),
         EditTask.routeName: (context) => EditTask(),
         Signup.routeName: (context) => Signup(),
         SignIn.routeName: (context) => SignIn(),
       },
-      themeMode: providerTheme.appTheme,
+      themeMode: themeProvider.themeState,
       theme: ThemeApp.lightTheme,
       darkTheme: ThemeApp.darkTheme,
-      locale: Locale(provider.appLanguage),
+      locale: Locale(languageProvider.appLanguage),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
     );
   }
 }
-

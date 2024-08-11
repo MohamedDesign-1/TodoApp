@@ -4,6 +4,7 @@ import 'package:todoapp/style/app_colors.dart';
 
 class ThemeApp {
   static final ThemeData lightTheme = ThemeData(
+    brightness: Brightness.light,
     scaffoldBackgroundColor: AppColors.backgroundColor,
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.primeryColor,
@@ -87,6 +88,7 @@ class ThemeApp {
     ),
   );
   static final ThemeData darkTheme = ThemeData(
+    brightness: Brightness.dark,
     scaffoldBackgroundColor: AppColors.backgroundDarkColor,
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.primeryColor,

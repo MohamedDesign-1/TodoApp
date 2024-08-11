@@ -2,29 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SelectLanguage extends ChangeNotifier {
-
   String appLanguage = 'en';
 
-  changeLanguage(String newLang) {
-    appLanguage = newLang;
-    notifyListeners();
+  SelectLanguage() {
+    loadLanguage();
   }
 
-  void changLang(String newLanguage) async {
-    if (appLanguage == newLanguage) {
-      return;
+  Future<void> changeLanguage(String newLang) async {
+    if (appLanguage != newLang) {
+      appLanguage = newLang;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString("code", appLanguage);
+      notifyListeners();
     }
-    appLanguage = newLanguage;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString("code", appLanguage);
-    notifyListeners();
-    }
-  Future<void> getLanguage() async {
+  }
+
+  Future<void> loadLanguage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String code = prefs.getString("code") ?? 'en';
-    if (appLanguage == code) {
-      return;
+    if (appLanguage != code) {
+      appLanguage = code;
+      notifyListeners();
     }
-    appLanguage=code;
-    }
+  }
 }
