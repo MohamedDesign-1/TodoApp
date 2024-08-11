@@ -10,6 +10,7 @@ import 'package:todoapp/providers/firbase_provider.dart';
 import 'package:todoapp/providers/select_language.dart';
 import 'package:todoapp/providers/select_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:todoapp/providers/user_provider.dart';
 import 'package:todoapp/style/theme_app.dart';
 import 'firebase_options.dart';
 
@@ -30,6 +31,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => BottomNavSelect()),
         ChangeNotifierProvider(create: (context) => SelectTheme()),
         ChangeNotifierProvider(create: (context) => FireBaseProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
       ],
       child: TodoApp(),
     ),
@@ -44,7 +46,7 @@ class TodoApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: HomeScreen.routeName,
+      initialRoute: SignIn.routeName,
       routes: {
         HomeScreen.routeName: (context) => HomeScreen(),
         EditTask.routeName: (context) => EditTask(),

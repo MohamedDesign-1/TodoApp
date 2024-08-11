@@ -8,8 +8,8 @@ class FireBaseProvider extends ChangeNotifier{
 
   List<Task> tasksList = [];
   var selectDate = DateTime.now();
-  void getAllTasksFromFireStore() async {
-    QuerySnapshot<Task> querySnapshot = await FirebaseUtils.getTasksCollection().get();
+  void getAllTasksFromFireStore(String uId) async {
+    QuerySnapshot<Task> querySnapshot = await FirebaseUtils.getTasksCollection(uId).get();
     tasksList = querySnapshot.docs.map((doc){
       return doc.data();
     }).toList();
@@ -28,9 +28,9 @@ class FireBaseProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  void changeSelectDate(DateTime newSelectDate) {
+  void changeSelectDate(DateTime newSelectDate , String uId) {
     selectDate = newSelectDate;
-    getAllTasksFromFireStore();
+    getAllTasksFromFireStore(uId);
     notifyListeners();
   }
 
@@ -39,21 +39,21 @@ class FireBaseProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  Future<void> deleteTask(Task task) async {
-    await FirebaseUtils.deleteTaskFromFireStore(task);
+  Future<void> deleteTask(Task task , String uId) async {
+    await FirebaseUtils.deleteTaskFromFireStore(task , uId);
     removeTask(task);
   }
 
-  void updateTask(Task task) {
-    FirebaseUtils.updateTaskInFireStore(task);
-    getAllTasksFromFireStore();
+  void updateTask(Task task , String uId) {
+    FirebaseUtils.updateTaskInFireStore(task , uId);
+    getAllTasksFromFireStore(uId);
     notifyListeners();
   }
 
-  void taskToDone(Task task) {
+  void taskToDone(Task task , String uId ) {
     task.isDone = true;
-    FirebaseUtils.updateTaskInFireStore(task);
-    getAllTasksFromFireStore();
+    FirebaseUtils.updateTaskInFireStore(task , uId);
+    getAllTasksFromFireStore(uId);
     notifyListeners();
   }
 }

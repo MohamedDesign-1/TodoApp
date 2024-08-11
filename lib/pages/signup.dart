@@ -2,10 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:todoapp/models/user_model.dart';
 import 'package:todoapp/utils/firbase_utils.dart';
 import 'package:todoapp/widgets/custom_btn.dart';
 import 'package:todoapp/widgets/custom_text_filed.dart';
 import '../providers/select_theme.dart';
+import '../providers/user_provider.dart';
 import '../style/app_colors.dart';
 import '../style/theme_app.dart';
 import 'home_screen.dart';
@@ -243,6 +245,12 @@ class Signup extends StatelessWidget {
   Future<void> createAccount(context) async {
     if(formkey.currentState!.validate()){
       FirebaseUtils.signUpAccount(emailController.text, password.text);
+      Myuser myUser = Myuser(email: emailController.text, id: FirebaseAuth.instance.currentUser?.uid ?? '');
+      var userProvider = Provider.of<UserProvider>(context, listen: false);
+      userProvider.updateUser(myUser);
+      await FirebaseUtils.addUserToFireStore(myUser);
+
+      Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
     }
   }
 }

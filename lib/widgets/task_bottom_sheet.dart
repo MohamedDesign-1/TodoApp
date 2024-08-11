@@ -5,6 +5,7 @@ import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/utils/firbase_utils.dart';
 import '../providers/firbase_provider.dart';
 import '../providers/select_theme.dart';
+import '../providers/user_provider.dart';
 import '../style/app_colors.dart';
 import '../style/theme_app.dart';
 import 'custom_btn.dart';
@@ -234,9 +235,10 @@ class _TaskBottomSheetState extends State<TaskBottomSheet> {
       Task task = Task(
       title: taskNameController.text,
       dateTime: selectDate);
-      FirebaseUtils.addTaskToFireStore(task).then((value) => print("Task Added Successfully"))
+      var userProvider = Provider.of<UserProvider>(context, listen: false);
+      FirebaseUtils.addTaskToFireStore(task , userProvider.currentUser!.id!).then((value) => print("Task Added Successfully"))
       .catchError((error) => print("Failed to add task : $error"));
-      listProvider.getAllTasksFromFireStore();
+      listProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
       Navigator.pop(context);
       }
     }

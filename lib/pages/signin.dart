@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:todoapp/pages/home_screen.dart';
@@ -128,6 +129,10 @@ class _SignInState extends State<SignIn> {
                           CustomBtn(
                             titleBtn: AppLocalizations.of(context)!.login,
                             onTap: () {
+                              AlertDialog(
+                                shape: RoundedRectangleBorder(),
+                                title: Text('Login Success' , style: ThemeApp.darkTheme.textTheme.titleMedium,),
+                              );
                               loginAccount(context);
                             },
                           ),
@@ -233,19 +238,21 @@ class _SignInState extends State<SignIn> {
                           CustomBtn(
                             titleBtn: AppLocalizations.of(context)!.login,
                             onTap: () {
+                              AlertDialog(
+                                shape: RoundedRectangleBorder(),
+                                title: Text('Login Success' , style: ThemeApp.darkTheme.textTheme.titleMedium,),
+                              );
+
                               loginAccount(context);
                             },
                           ),
                           TextButton(
                               onPressed: () {
-                                Navigator.of(context)
-                                    .pushReplacementNamed(Signup.routeName);
+                                Navigator.of(context).pushReplacementNamed(Signup.routeName);
                               },
                               child: Text(
-                                AppLocalizations.of(context)!
-                                    .create_new_account,
-                                style: ThemeApp.darkTheme.textTheme.titleMedium!
-                                    .copyWith(color: AppColors.blackColor),
+                                AppLocalizations.of(context)!.create_new_account,
+                                style: ThemeApp.darkTheme.textTheme.titleMedium!.copyWith(color: AppColors.blackColor),
                               )),
                         ],
                       ),
