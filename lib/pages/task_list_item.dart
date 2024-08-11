@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/pages/edit_task.dart';
+import 'package:todoapp/providers/user_provider.dart';
 import 'package:todoapp/style/app_colors.dart';
 import 'package:todoapp/style/theme_app.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -24,6 +25,7 @@ class _TaskListItemState extends State<TaskListItem> {
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<SelectTheme>(context);
     var firbaseProvider = Provider.of<FireBaseProvider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
 
     return themeProvider.isDarkMode() ? Container(
       margin: EdgeInsets.all(16),
@@ -35,7 +37,7 @@ class _TaskListItemState extends State<TaskListItem> {
           children: [
             SlidableAction(
               onPressed: (context) async {
-                await firbaseProvider.deleteTask(widget.task);
+                await firbaseProvider.deleteTask(widget.task , userProvider.currentUser!.id!);
               },
               backgroundColor: Color(0xFFFE4A49),
               foregroundColor: Colors.white,
@@ -101,8 +103,8 @@ class _TaskListItemState extends State<TaskListItem> {
               ),
               InkWell(
                 onTap: () {
-                  firbaseProvider.taskToDone(widget.task);
-                  firbaseProvider.getAllTasksFromFireStore();
+                  firbaseProvider.taskToDone(widget.task , userProvider.currentUser!.id!);
+                  firbaseProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
                 },
                 child: widget.task.isDone == true
                     ? Container(
@@ -167,8 +169,8 @@ class _TaskListItemState extends State<TaskListItem> {
               ),
               InkWell(
                 onTap: () {
-                  firbaseProvider.taskToDone(widget.task);
-                  firbaseProvider.getAllTasksFromFireStore();
+                  firbaseProvider.taskToDone(widget.task , userProvider.currentUser!.id!);
+                  firbaseProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
                 },
                 child: widget.task.isDone == true
                     ? Container(
@@ -208,7 +210,7 @@ class _TaskListItemState extends State<TaskListItem> {
             children: [
               SlidableAction(
                 onPressed: (context) async {
-                  await firbaseProvider.deleteTask(widget.task);
+                  await firbaseProvider.deleteTask(widget.task , userProvider.currentUser!.id!);
                 },
                 backgroundColor: Color(0xFFFE4A49),
                 foregroundColor: Colors.white,
@@ -274,8 +276,8 @@ class _TaskListItemState extends State<TaskListItem> {
                 ),
                 InkWell(
                   onTap: () {
-                    firbaseProvider.taskToDone(widget.task);
-                    firbaseProvider.getAllTasksFromFireStore();
+                    firbaseProvider.taskToDone(widget.task , userProvider.currentUser!.id!);
+                    firbaseProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
                   },
                   child: widget.task.isDone == true
                       ? Container(
@@ -340,8 +342,8 @@ class _TaskListItemState extends State<TaskListItem> {
                 ),
                 InkWell(
                   onTap: () {
-                    firbaseProvider.taskToDone(widget.task);
-                    firbaseProvider.getAllTasksFromFireStore();
+                    firbaseProvider.taskToDone(widget.task , userProvider.currentUser!.id!);
+                    firbaseProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
                   },
                   child: widget.task.isDone == true
                       ? Container(

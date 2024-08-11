@@ -9,6 +9,7 @@ import '../providers/bottom_nav_select.dart';
 import '../providers/firbase_provider.dart';
 import '../providers/select_language.dart';
 import '../providers/select_theme.dart';
+import '../providers/user_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = 'HomeScreen';
@@ -21,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var userProvider = Provider.of<UserProvider>(context);
     var provider = Provider.of<BottomNavSelect>(context);
     var providerLang = Provider.of<SelectLanguage>(context);
     var themeProvider = Provider.of<SelectTheme>(context);
@@ -54,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     locale: providerLang.appLanguage == 'en' ? 'en' : 'ar',
                     initialDate: listProvider.selectDate,
                     onDateChange: (selectedDate) {
-                    listProvider.changeSelectDate(selectedDate);
+                    listProvider.changeSelectDate(selectedDate , userProvider.currentUser!.id!);
                     },
                     headerProps: const EasyHeaderProps(
                       showHeader: false,
@@ -105,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     locale: providerLang.appLanguage == 'en' ? 'en' : 'ar',
                     initialDate: listProvider.selectDate,
                     onDateChange: (selectedDate) {
-                      listProvider.changeSelectDate(selectedDate);
+                      listProvider.changeSelectDate(selectedDate , userProvider.currentUser!.id!);
                     },
                     headerProps: const EasyHeaderProps(
                       showHeader: false,

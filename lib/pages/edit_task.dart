@@ -5,6 +5,7 @@ import 'package:todoapp/widgets/custom_btn.dart';
 import '../models/task_model.dart';
 import '../providers/firbase_provider.dart';
 import '../providers/select_theme.dart';
+import '../providers/user_provider.dart';
 import '../style/theme_app.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -299,7 +300,8 @@ class _EditTaskState extends State<EditTask> {
         title: titleController.text,
         dateTime: selectDate,
       );
-      Provider.of<FireBaseProvider>(context, listen: false).updateTask(task);
+      var userProvider = Provider.of<UserProvider>(context, listen: false);
+      Provider.of<FireBaseProvider>(context, listen: false).updateTask(task , userProvider.currentUser!.id!);
       Navigator.of(context).pop();
     }
   }

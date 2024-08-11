@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/pages/signin.dart';
+import 'package:todoapp/providers/firbase_provider.dart';
 import 'package:todoapp/style/app_colors.dart';
 import 'package:todoapp/style/theme_app.dart';
 import 'package:todoapp/utils/firbase_utils.dart';
@@ -21,6 +22,7 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<SelectTheme>(context);
+    var firebaseList = Provider.of<FireBaseProvider>(context);
     return themeProvider.isDarkMode() ?
     Container(
       margin: EdgeInsets.only(left: 16, right: 16),
@@ -63,6 +65,7 @@ class _SettingsState extends State<Settings> {
           SizedBox(height: MediaQuery.of(context).size.height * 0.03,),
           CustomBtn(titleBtn: AppLocalizations.of(context)!.logout_account, onTap: () {
             FirebaseUtils.signOut();
+            firebaseList.tasksList = [];
             Navigator.pushReplacementNamed(context, SignIn.routeName);
           })
 
@@ -109,6 +112,7 @@ class _SettingsState extends State<Settings> {
           SizedBox(height: MediaQuery.of(context).size.height * 0.03,),
           CustomBtn(titleBtn: AppLocalizations.of(context)!.logout_account, onTap: (){
             FirebaseUtils.signOut();
+            firebaseList.tasksList = [];
             Navigator.pushReplacementNamed(context, SignIn.routeName);
             }
           )
